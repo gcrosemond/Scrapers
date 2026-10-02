@@ -1,0 +1,9 @@
+id: EmpireStores
+name: Empire Stores
+metadata: {}
+version: 1
+date: "2026-10-02 00:00:00"
+requires: []
+source_repository: https://github.com/gcrosemond/CommunityScrapers
+files:
+- EmpireStores.yml

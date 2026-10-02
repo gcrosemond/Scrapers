@@ -1,0 +1,6 @@
+# Generated release artifacts
+/dist/
+*.zip
+
+# macOS metadata
+.DS_Store

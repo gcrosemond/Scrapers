@@ -1,0 +1,77 @@
+name: Jeedoo
+
+driver:
+  useSurf: true
+
+groupByName:
+  action: scrapeXPath
+  queryURL: https://www.jeedoo.com/porn-movies/?search={}
+  scraper: jeedooGroupSearch
+
+groupByURL:
+  - action: scrapeXPath
+    url:
+      - jeedoo.com/product/
+    scraper: jeedooGroupPage
+
+groupByFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: jeedooGroupPage
+
+xPathScrapers:
+  jeedooGroupSearch:
+    group:
+      Name:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' listing-grid ')]/a[contains(concat(' ', normalize-space(@class), ' '), ' item ')]/span[contains(@class, 'font-semibold')]
+        postProcess:
+          - replace:
+              - regex: "\\s+"
+                with: " "
+      URLs:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' listing-grid ')]/a[contains(concat(' ', normalize-space(@class), ' '), ' item ')]/@href
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://www.jeedoo.com/
+      FrontImage:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' listing-grid ')]/a[contains(concat(' ', normalize-space(@class), ' '), ' item ')]//img/@data-src
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: https://
+
+  jeedooGroupPage:
+    group:
+      Name:
+        selector: //h1[contains(@class, 'text-3xl')]
+        postProcess:
+          - replace:
+              - regex: "\\s+"
+                with: " "
+              - regex: "\\s+-\\s+DVD\\s*$"
+                with: ""
+      URLs:
+        selector: //link[@rel='canonical']/@href
+      FrontImage:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' pp-gallery ')]//a[contains(concat(' ', normalize-space(@class), ' '), ' pp-slide ')][1]/@href
+      BackImage:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' pp-gallery ')]//a[contains(concat(' ', normalize-space(@class), ' '), ' pp-slide ')][2]/@href
+      Studio:
+        Name: //div[contains(concat(' ', normalize-space(@class), ' '), ' pp-card-info ')]//a[contains(@href, '/porn-movies/?label=')][1]
+      Date:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' pp-card-info ')]//div[contains(concat(' ', normalize-space(@class), ' '), ' pp-dotted ')]//p/span[3]
+        postProcess:
+          - parseDate: "2006"
+      Director:
+        selector: //span[contains(concat(' ', normalize-space(@class), ' '), ' pp-fact-director ')]/a
+        postProcess:
+          - replace:
+              - regex: "\\s+"
+                with: " "
+      Synopsis:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' pp-description ')]
+        postProcess:
+          - replace:
+              - regex: "\\s+"
+                with: " "

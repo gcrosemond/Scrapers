@@ -1,0 +1,27 @@
+- id: EmpireStores
+  name: Empire Stores
+  version: 1
+  date: "2026-10-02 15:26:00"
+  path: EmpireStores.zip
+  sha256: d472ecf6c1fa5bc0cac21e733eb30ed341554de8c12c61507e6c68a4e02fceae
+  metadata:
+    group_urls:
+      - empirestores.co/
+- id: HotMovies
+  name: HotMovies
+  version: 1
+  date: "2026-10-02 15:26:00"
+  path: HotMovies.zip
+  sha256: 1de106db31d4bdc3d1ab7b9aa325175dc93027ee9956da45b89669365ad545e0
+  metadata:
+    group_urls:
+      - hotmovies.com/adult-movies/
+- id: Jeedoo
+  name: Jeedoo
+  version: 1
+  date: "2026-10-02 15:26:00"
+  path: Jeedoo.zip
+  sha256: 3af38a13666bbfec9f3130f78ddbd83ba57bf221aa6bafb4f29f807b8eb64a03
+  metadata:
+    group_urls:
+      - jeedoo.com/product/

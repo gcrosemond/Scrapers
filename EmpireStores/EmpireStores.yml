@@ -1,0 +1,97 @@
+name: Empire Stores
+
+driver:
+  useSurf: true
+  cookies:
+    - CookieURL: "https://empirestores.co"
+      Cookies:
+        - Name: ageConfirmed
+          Domain: "empirestores.co"
+          Value: "true"
+          Path: "/"
+
+groupByName:
+  action: scrapeXPath
+  queryURL: https://empirestores.co/Search?q={}
+  scraper: empireStoresGroupSearch
+
+groupByURL:
+  - action: scrapeXPath
+    url:
+      - empirestores.co/
+    scraper: empireStoresGroupPage
+
+groupByFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: empireStoresGroupPage
+
+xPathScrapers:
+  empireStoresGroupSearch:
+    group:
+      Name:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' list-page-grid ')]/div[contains(concat(' ', normalize-space(@class), ' '), ' item-grid ')]//a[contains(concat(' ', normalize-space(@class), ' '), ' boxcover ')]/span[contains(concat(' ', normalize-space(@class), ' '), ' movie-title ')]
+        postProcess:
+          - replace:
+              - regex: "\\s+"
+                with: " "
+      URLs:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' list-page-grid ')]/div[contains(concat(' ', normalize-space(@class), ' '), ' item-grid ')]//a[contains(concat(' ', normalize-space(@class), ' '), ' boxcover ')]/@href
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://empirestores.co/
+      FrontImage:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' list-page-grid ')]/div[contains(concat(' ', normalize-space(@class), ' '), ' item-grid ')]//a[contains(concat(' ', normalize-space(@class), ' '), ' boxcover ')]//img[contains(concat(' ', normalize-space(@class), ' '), ' boxcover-image ')]/@data-src
+
+  empireStoresGroupPage:
+    group:
+      Name:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' video-title ')]/h1[1]
+        postProcess:
+          - replace:
+              - regex: "\\s+"
+                with: " "
+      URLs:
+        selector: //link[@rel='canonical']/@href
+      FrontImage:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' video-details-container ')]//a[contains(concat(' ', normalize-space(@class), ' '), ' boxcover ')][1]//img/@data-src
+      BackImage:
+        selector: //div[@id='viewLargeBoxcoverCarousel']//div[contains(concat(' ', normalize-space(@class), ' '), ' carousel-item ')][2]//img/@data-src
+      Studio:
+        Name: //div[contains(concat(' ', normalize-space(@class), ' '), ' studio ')]/a[1]
+      Date:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' release-date ')][span[contains(normalize-space(.), 'Released:')]]
+        postProcess:
+          - replace:
+              - regex: "^.*Released:\\s*"
+                with: ""
+          - parseDate: Jan 02, 2006
+      Duration:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' release-date ')][span[contains(normalize-space(.), 'Length:')]]
+        postProcess:
+          - replace:
+              - regex: "^.*Length:\\s*"
+                with: ""
+              - regex: "\\bhrs?\\."
+                with: "h"
+              - regex: "\\bmins?\\."
+                with: "min"
+      Director:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' director ')]/a[1]
+        postProcess:
+          - replace:
+              - regex: "\\s+"
+                with: " "
+      ContainingGroup:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' video-title ')][.//h2[contains(normalize-space(.), 'Series:')]]//h2[1]
+        postProcess:
+          - replace:
+              - regex: "^\\s*Series:\\s*"
+                with: ""
+      Synopsis:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' synopsis ')]/p[1]
+        postProcess:
+          - replace:
+              - regex: "\\s+"
+                with: " "
