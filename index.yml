@@ -25,3 +25,12 @@
   metadata:
     group_urls:
       - jeedoo.com/product/
+- id: AdultFilmIndex
+  name: AdultFilmIndex
+  version: 1
+  date: "2026-10-02 15:40:00"
+  path: AdultFilmIndex.zip
+  sha256: 3b7b67c40de0bc32f60fe3f995e66a7d12d6ffaf3d35e14241939421d926d6a5
+  metadata:
+    group_urls:
+      - adultfilmindex.com/movie/
