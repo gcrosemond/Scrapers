@@ -34,3 +34,21 @@
   metadata:
     group_urls:
       - adultfilmindex.com/movie/
+- id: AdultDVDMarketplace
+  name: Adult DVD Marketplace
+  version: 1
+  date: "2026-10-05 00:00:00"
+  path: AdultDVDMarketplace.zip
+  sha256: fb8f78d2597e374f2195b353969e0d5edf49e18f2fc41ebe6d370bb659e37c40
+  metadata:
+    group_urls:
+      - adultdvdmarketplace.com/dvd_view_
+- id: Excalibur
+  name: Excalibur Films
+  version: 1
+  date: "2026-10-05 00:00:00"
+  path: Excalibur.zip
+  sha256: 5d9abae24ece97f30c4504a7d39937800d970ba4211adb8d111a6ea891767801
+  metadata:
+    group_urls:
+      - excaliburfilms.com/AdultDVD/

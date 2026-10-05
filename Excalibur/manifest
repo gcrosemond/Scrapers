@@ -1,0 +1,9 @@
+id: Excalibur
+name: Excalibur Films
+metadata: {}
+version: 1
+date: "2026-10-05 00:00:00"
+requires: []
+source_repository: https://github.com/gcrosemond/Scrapers
+files:
+- Excalibur.yml

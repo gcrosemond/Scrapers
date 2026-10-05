@@ -1,0 +1,88 @@
+name: Adult DVD Marketplace
+
+driver:
+  useSurf: true
+  preflight:
+    - https://www.adultdvdmarketplace.com/xcart/adult_dvd/disclaimer.php?action=enter&site=us
+
+groupByName:
+  action: scrapeXPath
+  queryURL: https://www.adultdvdmarketplace.com/xcart/adult_dvd/dvd_search.php?type=title&search={}
+  scraper: adultDVDMarketplaceGroupSearch
+
+groupByURL:
+  - action: scrapeXPath
+    url:
+      - adultdvdmarketplace.com/dvd_view_
+    scraper: adultDVDMarketplaceGroupPage
+
+groupByFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: adultDVDMarketplaceGroupPage
+
+xPathScrapers:
+  adultDVDMarketplaceGroupSearch:
+    group:
+      Name:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' product-col ') and contains(concat(' ', normalize-space(@class), ' '), ' list ')]//div[contains(concat(' ', normalize-space(@class), ' '), ' caption ')]/h4/a[1]
+        postProcess:
+          - replace:
+              - regex: "\\s+"
+                with: " "
+      URLs:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' product-col ') and contains(concat(' ', normalize-space(@class), ' '), ' list ')]//div[contains(concat(' ', normalize-space(@class), ' '), ' caption ')]/h4/a[1]/@href
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://www.adultdvdmarketplace.com/
+      FrontImage:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' product-col ') and contains(concat(' ', normalize-space(@class), ' '), ' list ')]/div[contains(concat(' ', normalize-space(@class), ' '), ' image ')]/a[1]/img[1]/@src
+      Studio:
+        Name: //div[contains(concat(' ', normalize-space(@class), ' '), ' product-col ') and contains(concat(' ', normalize-space(@class), ' '), ' list ')]//div[contains(concat(' ', normalize-space(@class), ' '), ' caption ')]/h4/a[1]/following-sibling::span[1]/a[1]
+      Synopsis:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' product-col ') and contains(concat(' ', normalize-space(@class), ' '), ' list ')]//div[contains(concat(' ', normalize-space(@class), ' '), ' description ')][1]
+        postProcess:
+          - replace:
+              - regex: "\\s+"
+                with: " "
+
+  adultDVDMarketplaceGroupPage:
+    group:
+      Name:
+        selector: //h1[1]
+        postProcess:
+          - replace:
+              - regex: "\\s+-\\s+DVD.*$"
+                with: ""
+              - regex: "\\s+"
+                with: " "
+      URLs:
+        selector: //meta[@property='og:url']/@content
+      FrontImage:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' images-block ')]//a[contains(concat(' ', normalize-space(@class), ' '), ' fancybox-button ')][1]/@href
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://www.adultdvdmarketplace.com/
+      Studio:
+        Name: //ul[contains(concat(' ', normalize-space(@class), ' '), ' manufacturer ')]//li[span[normalize-space()='Studio:']]/a[1]
+      Date:
+        selector: //ul[contains(concat(' ', normalize-space(@class), ' '), ' manufacturer ')]//li[span[normalize-space()='Released:']]
+        postProcess:
+          - replace:
+              - regex: "^.*Released:\\s*"
+                with: ""
+          - parseDate: "01/2006"
+      Director:
+        selector: //ul[contains(concat(' ', normalize-space(@class), ' '), ' manufacturer ')]//li[span[normalize-space()='Director:']]/a[1]
+        postProcess:
+          - replace:
+              - regex: "\\s+"
+                with: " "
+      Synopsis:
+        selector: //div[contains(concat(' ', normalize-space(@class), ' '), ' product-details ')]//h3[normalize-space()='Description']/following-sibling::p[1]
+        postProcess:
+          - replace:
+              - regex: "\\s+"
+                with: " "

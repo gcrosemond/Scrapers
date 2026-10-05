@@ -1,0 +1,76 @@
+name: Excalibur Films
+
+groupByName:
+  action: scrapeXPath
+  queryURL: https://www.excaliburfilms.com/search/adultSearch.htm?searchString={}&Case=ExcalMovies&Search=AdultDVDMovies&SearchFor=Title.x
+  scraper: excaliburGroupSearch
+
+groupByURL:
+  - action: scrapeXPath
+    url:
+      - excaliburfilms.com/AdultDVD/
+    scraper: excaliburGroupPage
+
+groupByFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: excaliburGroupPage
+
+xPathScrapers:
+  excaliburGroupSearch:
+    group:
+      Name:
+        selector: //a[contains(concat(' ', normalize-space(@class), ' '), ' searchTitle18 ')]
+        postProcess:
+          - replace:
+              - regex: "\\s+"
+                with: " "
+      URLs:
+        selector: //a[contains(concat(' ', normalize-space(@class), ' '), ' searchTitle18 ')]/@href
+      FrontImage:
+        selector: //td[@width='50']//img[1]/@src
+      Studio:
+        Name: //a[contains(concat(' ', normalize-space(@class), ' '), ' searchTitle18 ')]/ancestor::td[@width='550'][1]//font[contains(concat(' ', normalize-space(@class), ' '), ' starLink12 ')][normalize-space()='Released:']/following-sibling::font[1]/following-sibling::a[1]
+      Date:
+        selector: //a[contains(concat(' ', normalize-space(@class), ' '), ' searchTitle18 ')]/ancestor::td[@width='550'][1]//font[contains(concat(' ', normalize-space(@class), ' '), ' starLink12 ')][normalize-space()='Released:']/following-sibling::font[1]
+        postProcess:
+          - parseDate: "01/02/2006"
+
+  excaliburGroupPage:
+    group:
+      Name:
+        selector: //h1[1]
+        postProcess:
+          - replace:
+              - regex: "\\s+Adult DVD\\s*$"
+                with: ""
+              - regex: "\\s+"
+                with: " "
+      URLs:
+        selector: //link[@rel='canonical']/@href
+      FrontImage:
+        selector: //img[contains(@name, 'Adult DVD')][1]/@src
+      Studio:
+        Name: //font[normalize-space()='By:']/following-sibling::a[1]
+      Date:
+        selector: //font[normalize-space()='Released:']/following-sibling::font[1]
+        postProcess:
+          - parseDate: "1/2/2006"
+      Duration:
+        selector: //font[normalize-space()='Run Time:']/following-sibling::font[1]
+        postProcess:
+          - replace:
+              - regex: "\\s*min\\.?$"
+                with: "m"
+      Director:
+        selector: //font[normalize-space()='Director:']/following-sibling::a[1]
+        postProcess:
+          - replace:
+              - regex: "\\s+"
+                with: " "
+      Synopsis:
+        selector: //a[contains(., 'Description:')]/following-sibling::font[1]
+        postProcess:
+          - replace:
+              - regex: "\\s+"
+                with: " "

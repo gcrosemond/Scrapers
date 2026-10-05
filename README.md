@@ -8,6 +8,8 @@ Community group scrapers for [Stash](https://github.com/stashapp/stash).
 - **HotMovies**: `hotmovies.com`
 - **Jeedoo**: `jeedoo.com`
 - **AdultFilmIndex**: `adultfilmindex.com`
+- **Adult DVD Marketplace**: `adultdvdmarketplace.com`
+- **Excalibur Films**: `excaliburfilms.com`
 
 The scrapers support group name searches, direct URL scraping, and fragment
 scraping where supported by the source. Available metadata depends on the
